@@ -1,15 +1,11 @@
 ##
-## Look up application name via package name
 ##
-## Searching app name and category by package name
-## The input file contains app package names which are separated by \n
-## ex:
-## com.asus.email
-## com.asus.todo
-## com.asus.launcher
+## Searching popular apps from google play via keyword.
+## Then parsing the meta data of the popular apps and
+## output the meta data to file for marketing study.
 ##
 ## Author Feiwen Cheng
-## Date : 2014/6/16
+## Date : 2014/7/22
 
 import urllib,urllib2
 import sys
@@ -27,12 +23,16 @@ if len(sys.argv)!=3:
 #with open(sys.argv[1], 'r+') as inputFile:
 #	for line in inputFile:
 #		packages.append(line);
+
+#Search apps via key word from google play
 searchUrl = "https://play.google.com/store/search"
 searchValues = {"q" : sys.argv[1], "c" : "apps"}
 searchData = urllib.urlencode(searchValues)
 searchReq = urllib2.Request(searchUrl, searchData)
 searchPage = urllib2.urlopen(searchReq)
 searchSoup = BeautifulSoup(searchPage)
+
+#Get the entries of apps
 apps = searchSoup.findAll("div", class_="card no-rationale square-cover apps small")
 
 with codecs.open(sys.argv[2], 'w', 'utf-8-sig') as outputFile:
@@ -42,7 +42,7 @@ with codecs.open(sys.argv[2], 'w', 'utf-8-sig') as outputFile:
 	outputFile.write(",")
 	outputFile.write("App Category")
 	outputFile.write(",")
-	outputFile.write("Rate Count")
+	outputFile.write("Rating Count")
 	outputFile.write(",")
 	outputFile.write("Download Count")
 	outputFile.write(",")
@@ -50,6 +50,7 @@ with codecs.open(sys.argv[2], 'w', 'utf-8-sig') as outputFile:
 	outputFile.write(",")
 	outputFile.write("Vendor")
 	outputFile.write("\n")
+	#visit the webpage of the app on the google play
 	for app in apps:
 		appPackage = app["data-docid"]
 		outputFile.write(appPackage)
@@ -60,7 +61,6 @@ with codecs.open(sys.argv[2], 'w', 'utf-8-sig') as outputFile:
 		downloadCount = "Unknown"
 		score = "UnKnown"
 		vendor = "Unknown"
-
 		try:
 			page = urllib2.urlopen("https://play.google.com/store/apps/details?id="+appPackage)
 			soup = BeautifulSoup(page)
