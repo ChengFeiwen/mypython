@@ -12,19 +12,6 @@ def getAuthHeader(userName, password):
 	base64string = base64.encodestring('%s:%s' % (userName, password))[:-1]
 	return "Basic %s" % base64string
 
-def getBrowser(userName, password):
-	br = mechanize.Browser()
-	cj = cookielib.LWPCookieJar()
-	br.set_cookiejar(cj)
-	br.set_handle_equiv(True)
-	br.set_handle_gzip(True)
-	br.set_handle_redirect(True)
-	br.set_handle_referer(True)
-	br.set_handle_robots(False)
-	br.addheaders = [("User-agent","Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36")]
-	br.addheaders.append(('Authorization', getAuthHeader(userName, password)))
-	return br
-
 def findTTUrl(userName, password, ttId):
 	findUrl = ttUrlBase + "tmtrack.dll?FindForm"
 	values = {"sid" : "iratfcvh&ReportPage", "Template" : "reports/listframe", "incsub":"1" ,"options":"1", "Target":"QuickIdSearch", "TableId":"1001", "SearchTID":"1001", "SolutionId":"2","Keywords":ttId} 
@@ -45,7 +32,17 @@ def findTTUrl(userName, password, ttId):
 def updateTT(userName, password, ttId, updateInfo):
 	ttUrl = findTTUrl(userName, password, ttId)
 	#Use mechanize to emulate browser behavior
-	br = getBrowser(userName, password)
+	br = mechanize.Browser()
+	cj = cookielib.LWPCookieJar()
+	br.set_cookiejar(cj)
+	br.set_handle_equiv(True)
+	br.set_handle_gzip(True)
+	br.set_handle_redirect(True)
+	br.set_handle_referer(True)
+	br.set_handle_robots(False)
+	br.addheaders = [("User-agent","Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36")]
+	br.addheaders.append(('Authorization', getAuthHeader(userName, password)))
+	br.open(ttUrl)
 	#response = br.response()
 	br.select_form(name="ViewForm")
 	#<input class="roundedbutton" type="submit" name="TransitionId.1" value="Update" onclick="onClickButton(this)" style="">
@@ -72,7 +69,18 @@ def updateTT(userName, password, ttId, updateInfo):
 def resolveTT(userName, password, ttId, versionInfo):
 	ttUrl = findTTUrl(userName, password, ttId)
 	#Use mechanize to emulate browser behavior
-	br = getBrowser(userName, password)
+	br = mechanize.Browser()
+	cj = cookielib.LWPCookieJar()
+	br.set_cookiejar(cj)
+	br.set_handle_equiv(True)
+	br.set_handle_gzip(True)
+	br.set_handle_redirect(True)
+	br.set_handle_referer(True)
+	br.set_handle_robots(False)
+	br.addheaders = [("User-agent","Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36")]
+	br.addheaders.append(('Authorization', getAuthHeader(userName, password)))
+	br.open(ttUrl)
+	#response = br.response()
 	br.select_form(name="ViewForm")
 	#<input class="roundedbutton" type="submit" name="TransitionId.19" value="Verify Bug Fix" onclick="onClickButton(this)" style="">
 	br.submit(name="TransitionId.19", label="Verify Bug Fix")
@@ -98,7 +106,16 @@ def resolveTT(userName, password, ttId, versionInfo):
 def assignTT(userName, password, ttId):
 	ttUrl = findTTUrl(userName, password, ttId)
 	#Use mechanize to emulate browser behavior
-	br = getBrowser(userName, password)
+	br = mechanize.Browser()
+	cj = cookielib.LWPCookieJar()
+	br.set_cookiejar(cj)
+	br.set_handle_equiv(True)
+	br.set_handle_gzip(True)
+	br.set_handle_redirect(True)
+	br.set_handle_referer(True)
+	br.set_handle_robots(False)
+	br.addheaders = [("User-agent","Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36")]
+	br.addheaders.append(('Authorization', getAuthHeader(userName, password)))
 	br.open(ttUrl)
 	#response = br.response()
 	br.select_form(name="ViewForm")

@@ -67,8 +67,8 @@ with codecs.open(sys.argv[2], 'w', 'utf-8-sig') as outputFile:
 		s1 ="Unknown"
 		vendor = "Unknown"
 		try:
-			#page = urllib2.urlopen("https://play.google.com/store/apps/details?id=com.asus.email")
-			page = urllib2.urlopen("https://play.google.com/store/apps/details?id="+appPackage)
+			#page = urllib2.urlopen("https://play.google.com/store/apps/details?id="+appPackage)
+			page = urllib2.urlopen("https://play.google.com/store/apps/details?id=com.asus.email")
 			soup = BeautifulSoup(page)
 			appName = soup.find("div", class_="document-title").div.string.replace(","," ")
 			appCategory = soup.find("a", class_="document-subtitle category").span.string.replace(","," ")
@@ -107,9 +107,9 @@ with codecs.open(sys.argv[2], 'w', 'utf-8-sig') as outputFile:
 			outputFile.write(vendor)
 			outputFile.write("\n")
 		except:
-			#print '-'*60
-			#traceback.print_exc(file=sys.stdout)
-			#print '-'*60
+			print '-'*60
+			traceback.print_exc(file=sys.stdout)
+			print '-'*60
 			appSearchFromWDJ.append(appPackage)
 
 if len(appSearchFromWDJ) > 0 :
