@@ -9,7 +9,7 @@
 ## com.asus.launcher
 ##
 ## Author Feiwen Cheng
-## Date : 2014/7/22
+## Date : 2014/7/24
 
 import urllib,urllib2,sys,codecs,traceback
 from bs4 import BeautifulSoup
@@ -50,6 +50,8 @@ with codecs.open(sys.argv[2], 'w', 'utf-8-sig') as outputFile:
 	outputFile.write(",")
 	outputFile.write("S1")
 	outputFile.write(",")
+	outputFile.write("Price")	
+	outputFile.write(",")
 	outputFile.write("Vendor")
 	outputFile.write("\n")
 	#visit the webpage of the app on the google play
@@ -66,8 +68,9 @@ with codecs.open(sys.argv[2], 'w', 'utf-8-sig') as outputFile:
 		s2 ="Unknown"
 		s1 ="Unknown"
 		vendor = "Unknown"
+		price = "0"
 		try:
-			#page = urllib2.urlopen("https://play.google.com/store/apps/details?id=com.asus.email")
+			#page = urllib2.urlopen("https://play.google.com/store/apps/details?id=com.square_enix.android_googleplay.FFIV_GP")
 			page = urllib2.urlopen("https://play.google.com/store/apps/details?id="+appPackage)
 			soup = BeautifulSoup(page)
 			appName = soup.find("div", class_="document-title").div.string.replace(","," ")
@@ -80,8 +83,11 @@ with codecs.open(sys.argv[2], 'w', 'utf-8-sig') as outputFile:
 			s1 = soup.find("div", class_="rating-bar-container one").find("span", class_="bar-number").string.replace(",","")
 			downloadCount = soup.find(itemprop="numDownloads").string.replace(",","")
 			score = soup.find("div", class_="score").string
+			try:
+				price = soup.find(itemprop="price")["content"].replace(",","")
+			except:
+				pass
 			vendor = soup.find("a", class_="document-subtitle primary").span.string.replace(","," ")
-
 			outputFile.write(appPackage)
 			outputFile.write(",")
 			outputFile.write(appName)
@@ -103,6 +109,8 @@ with codecs.open(sys.argv[2], 'w', 'utf-8-sig') as outputFile:
 			outputFile.write(s2)
 			outputFile.write(",")
 			outputFile.write(s1)
+			outputFile.write(",")			
+			outputFile.write(price)			
 			outputFile.write(",")			
 			outputFile.write(vendor)
 			outputFile.write("\n")
