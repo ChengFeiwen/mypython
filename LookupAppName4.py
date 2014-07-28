@@ -20,14 +20,14 @@ def loadPackageFromFile(fileName):
 	packageName = []
 	with open(fileName, 'r+') as inputFile:
 		for line in inputFile:
-			packages.append(line.strip("\n"));
+			packageName.append(line.strip("\n"));
 	return packageName
 
 def searchPackageNameViaKeyword(keyword):
 	packageName = []
 	#Search apps via key word from google play
 	searchUrl = "https://play.google.com/store/search"
-	searchValues = {"q" : sys.argv[1], "c" : "apps"}
+	searchValues = {"q" : keyword, "c" : "apps"}
 	searchData = urllib.urlencode(searchValues)
 	searchReq = urllib2.Request(searchUrl, searchData)
 	searchPage = urllib2.urlopen(searchReq)
@@ -50,13 +50,13 @@ if len(sys.argv)!=4:
 #Get package name through inputfile or keyword
 packages = []
 if(sys.argv[1] == "0"):
-	packages = loadPackageFromFile(sys.argv[1])
+	packages = loadPackageFromFile(sys.argv[2])
 else:
-	packages = searchPackageNameViaKeyword(sys.argv[1])
+	packages = searchPackageNameViaKeyword(sys.argv[2])
 
 appSearchFromWDJ =[]
 
-with codecs.open(sys.argv[2], 'w', 'utf-8-sig') as outputFile:
+with codecs.open(sys.argv[3], 'w', 'utf-8-sig') as outputFile:
 	outputFile.write("App Package Name")
 	outputFile.write(",")
 	outputFile.write("App Name")
@@ -151,7 +151,7 @@ with codecs.open(sys.argv[2], 'w', 'utf-8-sig') as outputFile:
 
 if len(appSearchFromWDJ) > 0 and sys.argv[1] == "0" :
 	print "Some app need to look up from Wandouja"
-	with codecs.open("wandouja_" + sys.argv[2], 'w', 'utf-8-sig') as outputFile:
+	with codecs.open("wandouja_" + sys.argv[3], 'w', 'utf-8-sig') as outputFile:
 		outputFile.write("App Package Name")
 		outputFile.write(",")
 		outputFile.write("App Name")
