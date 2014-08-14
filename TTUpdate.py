@@ -95,8 +95,27 @@ def resolveTT(userName, password, ttId, versionInfo):
 		resolveReq.add_header("Authorization", getAuthHeader(userName, password))
 		resolvePage = urllib2.urlopen(resolveReq)		
 
+def dispathTT2CorrectOwner(userName, password):
+	reportUrl = "http://192.168.88.187/tmtrack/tmtrack.dll?ReportPage&reportid=29498&template=reports%2flist&RptKey=1408016805&Recno=-1"
+	req = urllib2.Request(reportUrl)
+	req.add_header("Authorization", getAuthHeader(userName, password))
+	page = urllib2.urlopen(req)
+	#Parse the result to get tt record id
+	soup = BeautifulSoup(page)
+	itemList = soup.findAll("a", class_="nounderline")
+	ttList = []
+	for item in itemList:
+		try:
+			id = item.string
+			int(id)
+			ttList.append(id)
+		except ValueError:
+			pass
+    # not an integer
+	return ttList
+
 def assignTT(userName, password, ttId):
-	ttUrl = findTTUrl(userName, password, ttId)
+	reportUrl = "http://192.168.88.187/tmtrack/tmtrack.dll?ReportPage&reportid=29498&template=reports%2flist&RptKey=1408016805&Recno=-1"
 	#Use mechanize to emulate browser behavior
 	br = getBrowser(userName, password)
 	br.open(ttUrl)
@@ -105,12 +124,13 @@ def assignTT(userName, password, ttId):
 	pass
 
 if __name__ == "__main__":
-	if len(sys.argv)!=3:
-		print "Usage",sys.argv[0], "ttID updateMessage"
-		sys.exit(0);
-	ttId = sys.argv[1]
-	updateMessage = sys.argv[2]
+	#if len(sys.argv)!=3:
+	#	print "Usage",sys.argv[0], "ttID updateMessage"
+	#	sys.exit(0);
+	#ttId = sys.argv[1]
+	#updateMessage = sys.argv[2]
 	userName = "test"
 	password = "test"
-	updateTT(userName, password, ttId, updateMessage)
+	print dispathTT2CorrectOwner(userName,password)
+	#updateTT(userName, password, ttId, updateMessage)
 	#resolveTT(userName, password, ttId, updateMessage)
